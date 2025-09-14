@@ -5,10 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // components
-import SectionHead from "../Animations/SectionHead";
-import { useStoreContext } from "@/store/context";
-import { setCookie } from "@/lib/Cookie";
 import Spinner from "../Spinner";
+import { useStoreContext } from "@/store/context";
+import SectionHead from "../Animations/SectionHead";
 import { getClientCookie } from "@/lib/ClientCookie";
 
 const LoginForm = () => {
@@ -23,15 +22,6 @@ const LoginForm = () => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const [secretCodeErr, setSecretCodeErr] = useState<string>("");
 
-  useEffect(() => {
-    const authCookie = getClientCookie("auth");
-
-    console.log(authCookie);
-    if (authCookie) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -43,13 +33,20 @@ const LoginForm = () => {
         body: JSON.stringify({ secret_code: secretCode }),
       });
 
+      const resStatus = await res.status;
+
       if (res.ok) {
         const { success, key } = await res.json();
         if (success && success === true) {
           setIsAuthenticated(true);
         }
       } else {
-        setSecretCodeErr("Failed to login. Wrong secret");
+        if (resStatus === 429) {
+          setSecretCode("Rate limit exceeded. Try again later");
+          setSecretCodeErr("Rate limit exceeded. Try again later");
+        } else {
+          setSecretCodeErr("Failed to login. Wrong secret");
+        }
       }
     }
 

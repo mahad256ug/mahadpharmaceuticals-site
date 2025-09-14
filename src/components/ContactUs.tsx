@@ -51,8 +51,7 @@ const ContactUs = () => {
             <SectionHead
               title="Let's Talk"
               className="mb-10 text-left"
-              subtitle="Have some big idea or brand to develop and need help? Then reach
-              out we'd love to hear about your project and provide help."
+              subtitle="Have questions or need assistance? We’re here to help you with your orders and health needs."
               subtitleClass="mx-0"
             />
 

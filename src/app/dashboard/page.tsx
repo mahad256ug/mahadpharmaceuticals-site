@@ -1,12 +1,18 @@
 import React from "react";
+import type { Metadata } from "next";
+
+// components
 import ProductForm from "@/components/forms/ProductForm";
 
-const page = () => {
-  return (
-    <div>
-      <ProductForm />
-    </div>
-  );
+export const metadata: Metadata = {
+  title: {
+    absolute: "Dashboard",
+  },
+  description: "?",
 };
 
-export default page;
+const Dashboard = () => {
+  return <ProductForm />;
+};
+
+export default Dashboard;

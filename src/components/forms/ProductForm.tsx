@@ -8,6 +8,7 @@ import { productSchema, ProductSchema } from "@/lib/schema";
 
 // components
 import MaxWidthWrapper from "../MaxWidthWrapper";
+import { slugify } from "@/lib/utils";
 
 type Props = {
   initialProduct?: Partial<productType>;
@@ -18,13 +19,13 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
     initialProduct.thumbnail ?? null
   );
-  const id = initialProduct.id ?? Date.now().toString();
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    getValues,
     reset,
     formState: { errors },
   } = useForm<ProductSchema>({
@@ -41,15 +42,8 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
     },
   });
 
-  function generateSlug(value: string) {
-    return (
-      value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-") || Date.now().toString()
-    );
+  if (watch("title")) {
+    setValue("slug", slugify(getValues("title")));
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -79,11 +73,14 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
   }
 
   const onSubmitForm: SubmitHandler<ProductSchema> = (data) => {
-    const product: productType = {
-      id,
-      ...data,
-    };
-    console.log(product, "this is the product");
+    const product: productType = data;
+    const apiUrl = true ? "/api/products/add" : "/api/products/update";
+
+    const res = fetch(apiUrl, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
     if (onSubmit) onSubmit(product);
     else console.log("Submitted product:", product);
   };
@@ -107,11 +104,6 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
               <span className="text-sm font-medium text-slate-700">Title</span>
               <input
                 {...register("title")}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setValue("title", val);
-                  if (!watch("slug")) setValue("slug", generateSlug(val));
-                }}
                 placeholder="E.g. Organic Banana (1kg)"
                 className="form-input"
                 required
@@ -128,9 +120,7 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
                 <span className="text-sm font-medium text-slate-700">Slug</span>
                 <input
                   {...register("slug")}
-                  onChange={(e) =>
-                    setValue("slug", generateSlug(e.target.value))
-                  }
+                  readOnly={true}
                   placeholder="auto-generated-slug"
                   className="form-input"
                 />
@@ -289,9 +279,9 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
           </aside>
         </div>
 
-        <footer className="text-xs text-slate-400 text-right">
-          ID: {id ?? 0}
-        </footer>
+        {false && (
+          <footer className="text-xs text-slate-400 text-right">ID: {0}</footer>
+        )}
       </form>
     </MaxWidthWrapper>
   );

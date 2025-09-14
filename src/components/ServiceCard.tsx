@@ -14,7 +14,7 @@ const ServiceCard = ({
       <div>
         <Icon className="size-10 mb-3 stroke-black/60 stroke-1" />
         <h3 className="text-xl mb-3 uppercase text-green-500">{props.title}</h3>
-        <p>{props.description}</p>
+        <p className="line-clamp-4">{props.description}</p>
       </div>
     </div>
   );

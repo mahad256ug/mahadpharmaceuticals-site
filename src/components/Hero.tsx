@@ -18,9 +18,7 @@ const Hero = () => {
               Welcome to Maha Pharmaceuticals
             </h2>
             <p className="text-white/80">
-              We are dedicated to advancing medical science and providing
-              trusted, cost-effective solutions that empower healthier
-              communities and sustainable growth.
+              Trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.
             </p>
 
             <button
@@ -34,8 +32,8 @@ const Hero = () => {
       </div>
 
       {/* services */}
-      <div className="max-w-[85%] -mt-16 lg:max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 max-sm:divide-y gap-10">
+      <div className="max-w-[85%] -mt-16 lg:max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-10">
           {services.map((item, idx) => (
             <ListAnimationContainer idx={idx} key={idx}>
               <ServiceCard {...item} />

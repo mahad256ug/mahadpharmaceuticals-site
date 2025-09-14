@@ -10,17 +10,12 @@ const About = () => {
           <div className="font-light  sm:text-lg">
             <SectionHead
               title=" About Maha Pharmaceuticals"
-              subtitle="We are strategists, designers and developers. Innovators and
-              problem solvers. Small enough to be simple and quick."
+              subtitle="At Maha Pharmaceuticals, we provide a reliable online platform for purchasing a wide range of medicines and healthcare products. Our mission is to make essential drugs accessible to everyone, offering a seamless and safe shopping experience from the comfort of your home.."
               className="text-left mb-4"
-              subtitleClass="mx-0"
+              subtitleClass="mx-0 max-w-none"
             />
             <p className="mb-4">
-              We are strategists, designers and developers. Innovators and
-              problem solvers. Small enough to be simple and quick, but big
-              enough to deliver the scope you want at the pace you need. Small
-              enough to be simple and quick, but big enough to deliver the scope
-              you want at the pace you need.
+             We deliver throughout the <b className="font-bold">UAE</b>, ensuring that your medicines reach you quickly and securely. Whether you have questions about our products or need assistance with your order, our team is always ready to help — <b className="font-bold">just click “Talk to Us”</b> for more information and support..
             </p>
             <p></p>
           </div>

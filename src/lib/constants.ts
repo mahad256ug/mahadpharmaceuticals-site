@@ -1,4 +1,4 @@
-import { HeartPulse, LucideIcon, LucideProps, Pill } from "lucide-react";
+import { HeartPulse, LucideIcon, LucideProps, Pill, Wallet } from "lucide-react";
 
 export const navLink: {label:string; href: string;}[] = [
     {
@@ -25,14 +25,21 @@ export const services: {icon: LucideIcon, title:string; description:string;}[] =
     icon: Pill,
     title: "Pharmaceuticals",
     description:
-      "High-quality prescription and over-the-counter medicines manufactured under strict international standards to ensure safety and efficacy."
+      "Providing a reliable selection of pharmaceuticals, from essential prescription medicines to over-the-counter drugs, sourced from certified suppliers."
   },
 
   {
     icon: HeartPulse,
     title: "Health",
     description:
-      "Comprehensive health solutions, including diagnostic tools and patient support services, designed to improve treatment outcomes."
+      "Promoting wellness with a range of healthcare products and services, including supplements, personal care, and patient support."
+  },
+
+   {
+    icon: Wallet,
+    title: "Cash on Deliver",
+    description:
+      "Have your medicines delivered safely and conveniently right to your doorstep with our reliable Cash on Delivery service, paying only when they arrive."
   },
   
 ];

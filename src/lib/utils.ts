@@ -18,3 +18,12 @@ export function safeCompare(a: string, b: string): boolean {
 
   return crypto.timingSafeEqual(bufA, bufB);
 }
+
+
+export function slugify(text: string) {
+  return text
+    .toLowerCase() // lowercase
+    .trim() // remove leading/trailing spaces
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/\s+/g, "-"); // replace spaces with hyphens
+}

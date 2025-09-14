@@ -11,8 +11,7 @@ const HomeProducts = () => {
       <MaxWidthWrapper>
         <SectionHead
           title="Our Products"
-          subtitle="Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Consectetur, quam."
+          subtitle="we offer safe, affordable, and high-quality medicines and healthcare products — from prescription drugs to everyday wellness essentials."
         />
 
         <HomeFeaturedProducts />

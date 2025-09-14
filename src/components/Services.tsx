@@ -1,9 +1,11 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import { services } from "@/lib/constants";
-import ListAnimationContainer from "./Animations/ListAnimationContainer";
 import ServiceCard from "./ServiceCard";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
+import ListAnimationContainer from "./Animations/ListAnimationContainer";
+
+// utils
+import { services } from "@/lib/constants";
 
 const Services = () => {
   return (
