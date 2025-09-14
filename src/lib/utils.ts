@@ -1,12 +1,11 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 import crypto from "crypto";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
-
 
 export function safeCompare(a: string, b: string): boolean {
   const bufA = Buffer.from(a);
@@ -19,11 +18,17 @@ export function safeCompare(a: string, b: string): boolean {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-
 export function slugify(text: string) {
   return text
-    .toLowerCase() // lowercase
-    .trim() // remove leading/trailing spaces
-    .replace(/[^\w\s-]/g, "") // remove special chars
-    .replace(/\s+/g, "-"); // replace spaces with hyphens
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
+}
+
+export function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map((item) => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
 }

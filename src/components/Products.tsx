@@ -1,21 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 // components
+import Spinner from "./Spinner";
 import ProductCard from "./ProductCard";
+import { productType } from "@/lib/types";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import ListAnimationContainer from "./Animations/ListAnimationContainer";
-import PaginationBtns from "./PaginationBtns";
-import { productType } from "@/lib/types";
-import Spinner from "./Spinner";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight, TicketMinus } from "lucide-react";
 
 const Products = () => {
   const router = useRouter();
 
+  // state
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page") ?? 1;
-  const qsParam = searchParams.get("search") ?? undefined;
+  const pageNum: number = searchParams.get("page")
+    ? Number(searchParams.get("page"))
+    : 1;
+  const searchQ = searchParams.get("search") ?? undefined;
 
   const [products, setProducts] = useState<productType[]>([]);
   const [paginator, setPaginator] = useState<{
@@ -28,45 +32,86 @@ const Products = () => {
     loading: true,
   });
 
-  async function fetchProducts(pageNum: number) {
-    const res = await fetch(`/api/products/?page=${pageNum}`, {
+  async function fetchProducts(pgNum: number, searchQs: string | undefined) {
+    let endPoint = `/api/products/?page=${pgNum}`;
+    setPaginator((prevData) => {
+      return { ...prevData, loading: true };
+    });
+
+    if (searchQs) {
+      endPoint += `&search=${encodeURIComponent(searchQs)}`;
+    }
+
+    const res = await fetch(`${endPoint}`, {
       method: "GET",
     });
 
     if (res.ok) {
-      const { products, totalPages, page, loading } = await res.json();
-
+      const { products, page, totalPages } = await res.json();
       setProducts(products);
       setPaginator({
         page: page,
         totalPages: totalPages,
-        loading: loading,
+        loading: false,
       });
     } else {
-      console.log("failed to loadin products");
+      setPaginator((prevData) => {
+        return { ...prevData, loading: false };
+      });
+      return (
+        <div className="text-center w-full py-24">
+          <p>Something went wrong contact Maha</p>
+        </div>
+      );
     }
   }
 
   useEffect(() => {
-    fetchProducts(1);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!params.get("page")) {
+      params.set("page", "1");
+      router.replace(`?${params.toString()}`);
+
+      setTimeout(() => {
+        fetchProducts(pageNum, searchQ);
+      }, 1000);
+    } else {
+      fetchProducts(pageNum, searchQ);
+    }
+
+    console.log(pageNum);
   }, [searchParams]);
 
+  const hasNext = paginator.page >= paginator.totalPages ? false : true;
+  const hasPrevious = paginator.page > 1 ? true : false;
+
+  // functions pagination
   const handleNext = () => {
-    if (paginator.page < paginator.totalPages) {
-      const nextPage = paginator.page + 1;
-      router.push(`/products?page=${nextPage}`);
+    if (hasNext) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", String(paginator.page + 1));
+      router.push(`/products?${params.toString()}`);
     }
   };
 
   const handlePrev = () => {
-    if (paginator.page > 1) {
-      const previousPage = paginator.page - 1;
-      router.push(`/products?page=${previousPage}`);
+    if (hasPrevious) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", String(paginator.page - 1));
+      router.push(`/products?${params.toString()}`);
     }
   };
 
   return (
-    <MaxWidthWrapper className="py-20">
+    <MaxWidthWrapper className="pb-20">
+      {searchQ && (
+        <div className="text-lg pb-8 pt-0 flex items-center gap-2">
+          <b className="font-bold">SEARCH:</b>
+          <p>{searchQ}</p>
+        </div>
+      )}
+
       {paginator.loading ? (
         <div className="w-full h-[65vh] flex items-center justify-center">
           <div className="h-10 w-10 flex items-center justify-center">
@@ -75,32 +120,52 @@ const Products = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-10 mb-20">
-            {products.map((product, idx) => (
-              <ListAnimationContainer idx={idx} key={idx}>
-                <ProductCard {...product} />
-              </ListAnimationContainer>
-            ))}
-          </div>
+          {products.length > 0 ? (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-10 mb-20">
+                {products.map((product, idx) => (
+                  <ListAnimationContainer idx={idx} key={idx}>
+                    <ProductCard {...product} />
+                  </ListAnimationContainer>
+                ))}
+              </div>
+              <div className="h-12 flex items-center gap-10">
+                {hasPrevious && (
+                  <button
+                    className="flex items-center justify-center px-2 h-full leading-tight gap-2 rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 duration-300 transition-all"
+                    onClick={handlePrev}
+                  >
+                    <span className="sr-only">Previous</span>
+                    <ChevronLeft className="size-4" />
+                    <span className="text-current text-sm">Previous</span>
+                  </button>
+                )}
 
-          <div>
-            <button onClick={handlePrev} disabled={paginator.page === 1}>
-              Previous
-            </button>
-            <span>
-              Page {paginator.page} of {paginator.totalPages}
-            </span>
-            <button
-              onClick={handleNext}
-              disabled={paginator.page === paginator.totalPages}
-            >
-              Next
-            </button>
-          </div>
+                <p className="text-sm">
+                  {paginator.page} of {paginator.totalPages}
+                </p>
+
+                {hasNext && (
+                  <button
+                    onClick={handleNext}
+                    className="flex items-center justify-center gap-2 px-2 h-full leading-tight rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 duration-300 transition-all"
+                  >
+                    <span className="sr-only">Next</span>
+                    <span className="text-current text-sm">Next</span>
+
+                    <ChevronRight className="size-4" />
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="py-10 flex items-center flex-col gap-2 justify-center text-center h-[65vh]">
+              <TicketMinus className="size-7" />
+              <p>No Products at the momment</p>
+            </div>
+          )}
         </>
       )}
-
-      {/* <PaginationBtns /> */}
     </MaxWidthWrapper>
   );
 };

@@ -24,15 +24,10 @@ export const addProduct = async (data: productType): Promise<boolean> => {
   }
 };
 
-export const delProduct = async (id: string): Promise<boolean> => {
-  try {
-    await deleteDoc(doc(db, "items", id));
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
+export async function delProduct(id: string) {
+  const productRef = doc(db, "products", id);
+  await deleteDoc(productRef);
+}
 
 export async function getProducts(pageSize: number = 10) {
   const q = query(

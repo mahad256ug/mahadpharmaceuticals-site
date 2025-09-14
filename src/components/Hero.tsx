@@ -3,6 +3,7 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import ServiceCard from "./ServiceCard";
 import { services } from "@/lib/constants";
 import ListAnimationContainer from "./Animations/ListAnimationContainer";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -18,15 +19,17 @@ const Hero = () => {
               Welcome to Maha Pharmaceuticals
             </h2>
             <p className="text-white/80">
-              Trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.
+              Trusted online pharmacy in the UAE, offering prescription and
+              over-the-counter medicines with fast, secure delivery and
+              convenient Cash on Delivery options.
             </p>
 
-            <button
-              type="button"
+            <Link
+              href="/products/"
               className="border border-green-500 py-3 px-5 text-green-500 hover:bg-green-500 hover:text-white duration-300 transition-all ease-in-out mt-10"
             >
               <span className="text-current">Find More</span>
-            </button>
+            </Link>
           </div>
         </MaxWidthWrapper>
       </div>

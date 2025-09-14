@@ -7,8 +7,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { productSchema, ProductSchema } from "@/lib/schema";
 
 // components
-import MaxWidthWrapper from "../MaxWidthWrapper";
 import { slugify } from "@/lib/utils";
+import MaxWidthWrapper from "../MaxWidthWrapper";
 
 type Props = {
   initialProduct?: Partial<productType>;
@@ -79,6 +79,11 @@ export default function ProductForm({ initialProduct = {}, onSubmit }: Props) {
     const res = fetch(apiUrl, {
       method: "POST",
       body: JSON.stringify(data),
+    }).then((resData) => {
+      if (resData.ok) {
+        reset();
+        console.log(data);
+      }
     });
 
     if (onSubmit) onSubmit(product);

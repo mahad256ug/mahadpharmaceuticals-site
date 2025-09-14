@@ -1,6 +1,5 @@
 "use client";
 
-import { productType } from "@/lib/types";
 import React, {
   createContext,
   useContext,
@@ -8,13 +7,27 @@ import React, {
   useState,
   useEffect,
 } from "react";
+import { productType } from "@/lib/types";
 
 interface StoreContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   productsCart: productType[];
+  resetProductCart: () => void;
   addProductToCart: (arg0: productType) => void;
   removeProductFromCart: (arg0: productType) => void;
+  deleteAlertState: {
+    product?: productType;
+    title: string;
+    isVisible: boolean;
+  };
+  setDeleteAlertState: React.Dispatch<
+    React.SetStateAction<{
+      product?: productType;
+      title: string;
+      isVisible: boolean;
+    }>
+  >;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -25,14 +38,15 @@ interface StoreProviderProps {
 
 export const StoreProvider = ({ children }: StoreProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [productsCart, setProductsCart] = useState<productType[]>(() => {
-    const recentCartProducts = localStorage.getItem("cartProducts");
-
-    if (recentCartProducts) {
-      return JSON.parse(recentCartProducts);
-    } else {
-      return [];
-    }
+  const [productsCart, setProductsCart] = useState<productType[]>([]);
+  const [deleteAlertState, setDeleteAlertState] = useState<{
+    product?: productType;
+    title: string;
+    isVisible: boolean;
+  }>({
+    product: undefined,
+    title: "",
+    isVisible: false,
   });
 
   const checkAuth = async () => {
@@ -61,16 +75,32 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
     setProductsCart((prevState) => prevState.filter((p) => p.id !== data.id));
   }
 
+  function resetProductCart() {
+    setProductsCart([]);
+  }
+
   useEffect(() => {
     checkAuth();
+
+    const recentCartProducts = localStorage.getItem("cartProducts");
+    if (recentCartProducts) {
+      setProductsCart(JSON.parse(recentCartProducts));
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cartProducts", JSON.stringify(productsCart));
+  }, [productsCart]);
 
   const store: StoreContextType = {
     isAuthenticated,
     setIsAuthenticated,
     productsCart,
     addProductToCart,
+    resetProductCart,
     removeProductFromCart,
+    deleteAlertState,
+    setDeleteAlertState,
   };
 
   return (
@@ -78,7 +108,6 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
   );
 };
 
-// 4. Custom hook
 export function useStoreContext(): StoreContextType {
   const context = useContext(StoreContext);
   if (!context) {

@@ -20,10 +20,11 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { isAuthenticated } = useStoreContext();
+  const { isAuthenticated, productsCart } = useStoreContext();
 
   const [searchBox, setSearchBox] = useState<boolean>(false);
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
+  const productsCartCount = productsCart.length;
 
   useEffect(() => {
     setToggleSidebar(false);
@@ -115,17 +116,29 @@ const Navbar = () => {
             </button>
 
             <button
+              onClick={() => {
+                router.push("/cart");
+              }}
               type="button"
-              className="w-10 h-10 flex items-center justify-center"
+              className={`w-10 h-10 flex items-center justify-center relative ${productsCartCount ? "bounce-ani" : ""}`}
             >
-              <LucideShoppingBag className="size-5" />
+              <div>
+                <LucideShoppingBag className="size-5" />
+              </div>
+              {productsCartCount > 0 && (
+                <div className="absolute bg-green-500 h-6 w-6 -top-1 -right-1 flex items-center justify-center max-sm:text-sm">
+                  <span className="text-xs font-semibold text-white">
+                    {productsCartCount}
+                  </span>
+                </div>
+              )}
             </button>
 
             {isAuthenticated ? (
               <button
                 type="button"
                 onClick={() => router.push("/dashboard?add_product=true")}
-                className="w-fit px-3 h-10 flex items-center gap-2 bg-green-500 text-white ml-3 rounded-lg"
+                className="w-fit px-3 h-12 flex items-center gap-2 bg-green-500 text-white ml-3"
               >
                 <PlusIcon className="size-5" />
                 <span className="text-sm text-current whitespace-nowrap hidden sm:block">
@@ -136,7 +149,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => router.push("?login=true")}
-                className="w-fit px-5 h-full bg-green-500 text-white ml-3 rounded-full"
+                className="w-fit px-5 h-full bg-green-500 text-white ml-3"
               >
                 Login
               </button>
@@ -161,6 +174,7 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* search box */}
         <AnimatePresence>
           {searchBox && (
             <motion.div

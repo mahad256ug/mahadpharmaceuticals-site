@@ -7,6 +7,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { StoreProvider } from "@/store/context";
 import LoginForm from "@/components/forms/LoginForm";
+import DeleteAlert from "@/components/DeleteAlert";
+import { ToastContainer } from "react-toastify";
 
 const urbanist = Urbanist({
   variable: "--font-urbanist",
@@ -24,7 +26,8 @@ export const metadata: Metadata = {
     template: "%s | Maha pharmaceuticals",
     absolute: "",
   },
-  description: "Maha Pharmaceuticals is a trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.",
+  description:
+    "Maha Pharmaceuticals is a trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.",
   icons: "/logo.svg",
 };
 
@@ -41,6 +44,8 @@ export default function RootLayout({
         <StoreProvider>
           <Navbar />
           <LoginForm />
+          <DeleteAlert />
+          <ToastContainer />
           {children}
           <Footer />
         </StoreProvider>

@@ -1,56 +1,88 @@
 "use client";
 
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+// compoenent
 import { productImg } from "@/assets";
 import { productType } from "@/lib/types";
 import { useStoreContext } from "@/store/context";
-import { ClipboardEdit, Minus, ShoppingBag } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { Bookmark, ClipboardEdit, Trash } from "lucide-react";
 
 const ProductCard = ({ ...props }: productType) => {
-  const { isAuthenticated } = useStoreContext();
+  const {
+    isAuthenticated,
+    productsCart,
+    addProductToCart,
+    removeProductFromCart,
+    setDeleteAlertState,
+  } = useStoreContext();
+
+  const exists = productsCart.some((p) => p.id === props.id);
 
   return (
     <div className="flex flex-col items-start">
-      <div className="bg-accent/80 relative">
+      <div className="bg-accent/80 relative h-full max-h-[18rem] flex items-center justify-center min-h-[18rem]">
         <Image
           src={props.thumbnail ?? productImg}
           alt="image"
           width={300}
           height={520}
         />
+      </div>
+      <div className="flex items-center justify-between gap-2 w-full my-4 relative">
+        <p className="block font-semibold capitalize line-clamp-3 sm:line-clamp-2">
+          {props.title ?? "Product"}
+        </p>
+
+        {!props.view_price && <p className="block">AED {props.price}</p>}
 
         {isAuthenticated && (
-          <div className="absolute top-2 right-2 text-base">
-            <Link
-              href={`/dashboard/`}
-              className="w-10 h-10 flex items-center border justify-center bg-white hover:bg-transparent duration-300 transition-all"
+          <>
+            {/* delete */}
+            <button
+              type="button"
+              onClick={() =>
+                setDeleteAlertState({
+                  product: props,
+                  isVisible: true,
+                  title: "",
+                })
+              }
+              className="h-10 w-fit px-2 gap-2 duration-300 absolute right-28 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
             >
-              <ClipboardEdit className="stroke-1 " />
-            </Link>
-          </div>
-        )}
-      </div>
-      <div className="flex items-center justify-between w-full my-2">
-        <p className="block font-semibold capitalize">{props.title}</p>
+              <Trash className="stroke-1" />
+            </button>
 
-        <button
-          type="button"
-          className="h-10 w-fit px-2  gap-2 duration-300 transition-all text-green-500 hover:text-black/70 flex items-center "
-        >
-          {false ? (
-            <>
-              <span className="text-sm text-current hidden sm:block">Cart</span>
-              <ShoppingBag className="size-4 stroke-1" />
-            </>
-          ) : (
-            <>
-              <span className="text-current">Del</span>
-              <Minus className="size-4" />
-            </>
-          )}
-        </button>
+            {/* edit */}
+            <Link
+              href={`/dashboard/${props.slug}`}
+              className="h-10 w-fit px-2 gap-2 duration-300 absolute right-14 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
+            >
+              <ClipboardEdit className="stroke-1" />
+            </Link>
+          </>
+        )}
+
+        {/* add to cart */}
+        {exists ? (
+          <button
+            type="button"
+            onClick={() => removeProductFromCart(props)}
+            className="h-10 w-fit px-2 gap-2 duration-300 absolute right-0 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
+          >
+            <Bookmark className="fill-current" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => addProductToCart(props)}
+            className="h-10 w-fit px-2 gap-2 duration-300 absolute right-0 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
+          >
+            <Bookmark className="stroke-1" />
+          </button>
+        )}
       </div>
     </div>
   );
