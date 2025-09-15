@@ -24,17 +24,25 @@ const ProductCard = ({ ...props }: productType) => {
   return (
     <div className="flex flex-col items-start">
       <div className="bg-accent/80 relative h-full max-h-[18rem] flex items-center justify-center min-h-[18rem]">
-        <Image
-          src={props.thumbnail ?? productImg}
-          alt="image"
-          width={300}
-          height={520}
-        />
+        <Link
+          href={`/products/${props.slug}`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <Image
+            src={props.thumbnail ?? productImg}
+            alt="image"
+            width={300}
+            height={520}
+          />
+        </Link>
       </div>
       <div className="flex items-center justify-between gap-2 w-full my-4 relative">
-        <p className="block font-semibold capitalize line-clamp-3 sm:line-clamp-2">
+        <Link
+          href={`/products/${props.slug}`}
+          className="block font-semibold capitalize line-clamp-3 sm:line-clamp-2"
+        >
           {props.title ?? "Product"}
-        </p>
+        </Link>
 
         {!props.view_price && <p className="block">AED {props.price}</p>}
 
@@ -57,7 +65,7 @@ const ProductCard = ({ ...props }: productType) => {
 
             {/* edit */}
             <Link
-              href={`/dashboard/${props.slug}`}
+              href={`/dashboard/edit/${props.slug}`}
               className="h-10 w-fit px-2 gap-2 duration-300 absolute right-14 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
             >
               <ClipboardEdit className="stroke-1" />
@@ -70,9 +78,9 @@ const ProductCard = ({ ...props }: productType) => {
           <button
             type="button"
             onClick={() => removeProductFromCart(props)}
-            className="h-10 w-fit px-2 gap-2 duration-300 absolute right-0 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border"
+            className="h-10 w-fit px-2 gap-2 duration-300 absolute right-0 bottom-[155%] transition-all hover:text-black/70 flex items-center z-10 bg-accent border text-black/60"
           >
-            <Bookmark className="fill-current" />
+            <Bookmark className="fill-current stroke-black/10" />
           </button>
         ) : (
           <button

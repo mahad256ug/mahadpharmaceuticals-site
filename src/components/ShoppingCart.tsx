@@ -12,7 +12,7 @@ const ShoppingCart = () => {
   const { productsCart, resetProductCart } = useStoreContext();
 
   const message = encodeURIComponent(
-    `Hello, I want to buy: ${productsCart.map((item) => item.title).join(", ")}`
+    `Hello Maha Pharmaceuticals, I want to buy: ${productsCart.map((item) => item.title).join(", ")}`
   );
   const whatsappLink = `https://wa.me/${NO_NUMBER}?text=${message}`;
 

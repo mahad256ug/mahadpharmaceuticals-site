@@ -47,11 +47,11 @@ const Products = () => {
     });
 
     if (res.ok) {
-      const { products, page, totalPages } = await res.json();
-      setProducts(products);
+      const resData = await res.json();
+      setProducts(resData.products);
       setPaginator({
-        page: page,
-        totalPages: totalPages,
+        page: resData.pageNum,
+        totalPages: resData.totalPages,
         loading: false,
       });
     } else {
@@ -90,6 +90,7 @@ const Products = () => {
   const handleNext = () => {
     if (hasNext) {
       const params = new URLSearchParams(searchParams.toString());
+      console.log(paginator);
       params.set("page", String(paginator.page + 1));
       router.push(`/products?${params.toString()}`);
     }

@@ -46,5 +46,5 @@ export const services: {
   },
 ];
 
-export const PAGE_SIZE = 2;
+export const PAGE_SIZE = 1;
 export const NO_NUMBER: string = "+256708332391";

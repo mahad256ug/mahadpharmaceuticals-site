@@ -9,10 +9,11 @@ interface RouteParams {
 
 export async function GET(_: Request, { params }: RouteParams) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
+    const productSlug = slug[0];
 
     const productsRef = collection(db, "products");
-    const q = query(productsRef, where("slug", "==", slug), limit(1));
+    const q = query(productsRef, where("slug", "==", productSlug), limit(1));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {

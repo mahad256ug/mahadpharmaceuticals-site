@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
         query(baseQuery, where("is_featured", "==", true), limit(4))
       );
     } else {
-      if (pageNum === 1) {
+      if (pageNum <= 1) {
         snapshot = await getDocs(query(baseQuery, limit(PAGE_SIZE)));
       } else {
         const prevSnapshot = await getDocs(
@@ -81,9 +81,9 @@ export async function GET(req: NextRequest) {
       ...doc.data(),
     }));
 
-    // if (hFeat || hProds) {
-    //   products = shuffleArray(products);
-    // }
+    if (hFeat || hProds) {
+      products = shuffleArray(products);
+    }
 
     return NextResponse.json({
       products,
