@@ -1,6 +1,8 @@
 import React from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
+import Image from "next/image";
+import { productImg } from "@/assets";
 
 const About = () => {
   return (
@@ -15,19 +17,28 @@ const About = () => {
               subtitleClass="mx-0 max-w-none"
             />
             <p className="mb-4">
-             We deliver throughout the <b className="font-bold">UAE</b>, ensuring that your medicines reach you quickly and securely. Whether you have questions about our products or need assistance with your order, our team is always ready to help — <b className="font-bold">just click “Talk to Us”</b> for more information and support..
+              We deliver throughout the <b className="font-bold">UAE</b>,
+              ensuring that your medicines reach you quickly and securely.
+              Whether you have questions about our products or need assistance
+              with your order, our team is always ready to help —{" "}
+              <b className="font-bold">just click “Talk to Us”</b> for more
+              information and support..
             </p>
             <p></p>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-8">
-            <img
+            <Image
               className="w-full rounded-lg bg-neutral-100"
-              src="/product.png"
+              src={productImg}
+              width={500}
+              height={750}
               alt="Drug"
             />
-            <img
-              className="mt-4 w-full lg:mt-10 rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
+            <Image
+              className="mt-4 w-full lg:mt-10 rounded-lg bg-neutral-100"
+              width={500}
+              height={750}
+              src={productImg}
               alt="office content 2"
             />
           </div>

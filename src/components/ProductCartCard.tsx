@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 
 // compoennts
 import { X } from "lucide-react";
@@ -12,10 +13,12 @@ const ProductCartCard = (product: productType) => {
     <div className="p-4 md:p-6 bg-accent">
       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
         <a href="#" className="w-20 shrink-0 md:order-1">
-          <img
+          <Image
             className="h-20 w-20 dark:hidden"
-            src={product.thumbnail}
-            alt="imac image"
+            src={product.thumbnail ?? ""}
+            alt={product.title}
+            width={300}
+            height={300}
           />
         </a>
 

@@ -59,6 +59,7 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
       const data = await res.json();
       setIsAuthenticated(data.authenticated);
     } catch (err) {
+      console.log(err);
       setIsAuthenticated(false);
     }
   };

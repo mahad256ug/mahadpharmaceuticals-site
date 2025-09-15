@@ -17,8 +17,8 @@ export const addProduct = async (
   data: productType
 ): Promise<{
   success: boolean;
-  product?: productType;
-  error?: any;
+  product?: productType & { id: string };
+  error?: string;
 }> => {
   try {
     // Add new document to "products" collection
@@ -33,11 +33,16 @@ export const addProduct = async (
       };
       return { success: true, product: newProduct };
     } else {
-      return { success: false, product: undefined };
+      return {
+        success: false,
+        product: undefined,
+        error: "Failed to fetch new product",
+      };
     }
-  } catch (error) {
-    // console.log(error); TODO
-    return { success: false, error };
+  } catch (error: unknown) {
+    // Narrow the error to a string if possible
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, error: message };
   }
 };
 
@@ -49,7 +54,7 @@ export async function delProduct(id: string) {
 export async function getProducts(pageSize: number = 10) {
   const q = query(
     collection(db, "products"),
-    orderBy("title"), // or "price", any field
+    orderBy("title"),
     limit(pageSize)
   );
 
@@ -77,7 +82,7 @@ export async function updateProduct(id: string, data: Partial<productType>) {
       return { success: false, error: "Product not found" };
     }
   } catch (err) {
-    // console.error("Error updating product:", err); TODO
+    // console.error("Error updating product:", err); // TODO
     return { success: false, error: err };
   }
 }

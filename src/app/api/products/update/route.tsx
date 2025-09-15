@@ -35,7 +35,7 @@ export async function PUT(req: Request) {
       { status: 401 }
     );
   } catch (err) {
-    // console.error(err);
+    console.error(err);
     return NextResponse.json(
       { error: "Internal server error. Please try again later." },
       { status: 500 }

@@ -1,9 +1,11 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import Link from "next/link";
+
+// component
 import ServiceCard from "./ServiceCard";
 import { services } from "@/lib/constants";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 import ListAnimationContainer from "./Animations/ListAnimationContainer";
-import Link from "next/link";
 
 const Hero = () => {
   return (

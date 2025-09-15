@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "../Spinner";
 import { useStoreContext } from "@/store/context";
 import SectionHead from "../Animations/SectionHead";
-import { getClientCookie } from "@/lib/ClientCookie";
 
 const LoginForm = () => {
   const { isAuthenticated, setIsAuthenticated } = useStoreContext();
@@ -36,7 +35,7 @@ const LoginForm = () => {
       const resStatus = await res.status;
 
       if (res.ok) {
-        const { success, key } = await res.json();
+        const { success } = await res.json();
         if (success && success === true) {
           setIsAuthenticated(true);
         }

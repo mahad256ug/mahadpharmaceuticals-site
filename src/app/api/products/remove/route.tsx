@@ -1,6 +1,5 @@
 import { getCookie } from "@/lib/Cookie";
 import { safeCompare } from "@/lib/utils";
-import { delProduct } from "@/store/fbUtils";
 import { NextResponse } from "next/server";
 
 const SECRET_CODE = process.env.SECRET_CODE ?? "";

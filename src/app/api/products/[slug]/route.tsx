@@ -1,19 +1,17 @@
 // app/api/products/[slug]/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/store/firebase";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 
-interface RouteParams {
-  params: { slug: string };
-}
-
-export async function GET(_: Request, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
-    const { slug } = await params;
-    const productSlug = slug[0];
+    const slug = (await params).slug;
 
     const productsRef = collection(db, "products");
-    const q = query(productsRef, where("slug", "==", productSlug), limit(1));
+    const q = query(productsRef, where("slug", "==", slug), limit(1));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
