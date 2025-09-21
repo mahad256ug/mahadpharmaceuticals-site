@@ -32,3 +32,17 @@ export function shuffleArray<T>(array: T[]): T[] {
     .sort((a, b) => a.sort - b.sort)
     .map(({ item }) => item);
 }
+
+export function sanitizeSearchParam(
+  input: string | null | undefined
+): string | null {
+  if (!input) return null;
+
+  let sanitized = input.trim();
+
+  sanitized = sanitized.toLowerCase();
+
+  sanitized = sanitized.replace(/\s+/g, " ");
+
+  return sanitized || null;
+}

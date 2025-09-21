@@ -1,5 +1,6 @@
 import { getCookie } from "@/lib/Cookie";
 import { safeCompare } from "@/lib/utils";
+import { delProduct } from "@/store/fbUtils";
 import { NextResponse } from "next/server";
 
 const SECRET_CODE = process.env.SECRET_CODE ?? "";
@@ -18,7 +19,7 @@ export async function DELETE(req: Request) {
 
     // Check secret code
     if (safeCompare(secret_code, SECRET_CODE)) {
-      // await delProduct(id); TODO
+      await delProduct(id); // TODO
       console.log("deleting the product");
 
       return NextResponse.json(

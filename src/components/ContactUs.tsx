@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
 import { LocateFixedIcon } from "lucide-react";
+import { NO_NUMBER } from "@/lib/constants";
 
 const ContactUs = () => {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
@@ -101,7 +102,7 @@ const ContactUs = () => {
                     </svg>
                   </div>
                   <a target="blank" href="" className="text-base ml-3">
-                    <p>+256 708 332 391</p>
+                    <p>{NO_NUMBER}</p>
                   </a>
                 </li>
               </ul>

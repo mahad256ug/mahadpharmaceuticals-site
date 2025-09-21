@@ -16,6 +16,7 @@ interface StoreContextType {
   resetProductCart: () => void;
   addProductToCart: (arg0: productType) => void;
   removeProductFromCart: (arg0: productType) => void;
+  authLoading: boolean;
   deleteAlertState: {
     product?: productType;
     title: string;
@@ -38,6 +39,7 @@ interface StoreProviderProps {
 
 export const StoreProvider = ({ children }: StoreProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [productsCart, setProductsCart] = useState<productType[]>([]);
   const [deleteAlertState, setDeleteAlertState] = useState<{
     product?: productType;
@@ -50,8 +52,8 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
   });
 
   const checkAuth = async () => {
-    console.log("authenicating");
     try {
+      setAuthLoading(true);
       const res = await fetch("/api/check-auth", {
         method: "GET",
         credentials: "include", // important!
@@ -61,6 +63,9 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
     } catch (err) {
       console.log(err);
       setIsAuthenticated(false);
+      setAuthLoading(false);
+    } finally {
+      setAuthLoading(false);
     }
   };
 
@@ -96,6 +101,7 @@ export const StoreProvider = ({ children }: StoreProviderProps) => {
   const store: StoreContextType = {
     isAuthenticated,
     setIsAuthenticated,
+    authLoading,
     productsCart,
     addProductToCart,
     resetProductCart,

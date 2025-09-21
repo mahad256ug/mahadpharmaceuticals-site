@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 
 // components
@@ -12,7 +12,11 @@ export const metadata: Metadata = {
 };
 
 const Dashboard = () => {
-  return <ProductForm />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductForm />;
+    </Suspense>
+  );
 };
 
 export default Dashboard;

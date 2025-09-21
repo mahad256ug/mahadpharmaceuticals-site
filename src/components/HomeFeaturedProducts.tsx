@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 import { productType } from "@/lib/types";
 import { CarouselItem } from "./ui/carousel";
 import GenericCarousel from "./GenericCarousel";
-import FeaturedProducts from "./FeaturedProducts";
+import FeaturedProductCard from "./FeaturedProductCard";
 
 const HomeFeaturedProducts = () => {
   const [productsItems, setProductsItems] = useState<productType[]>([]);
@@ -46,14 +46,20 @@ const HomeFeaturedProducts = () => {
       >
         {productsItems.length > 0 && (
           <GenericCarousel contentClassName="w-full">
-            {productsItems.map((item, idx) => (
-              <CarouselItem
-                key={idx}
-                className="aspect-video lg:basis-1/2 sm:pl-10"
-              >
-                <FeaturedProducts {...item} />
-              </CarouselItem>
-            ))}
+            {productsItems.map((item, idx) => {
+              // Set basis: full width if only one item, else 1/2
+              const basisClass =
+                productsItems.length === 1 ? "basis-full" : "lg:basis-1/2";
+
+              return (
+                <CarouselItem
+                  key={idx}
+                  className={`${basisClass} sm:pl-10 aspect-video`}
+                >
+                  <FeaturedProductCard {...item} />
+                </CarouselItem>
+              );
+            })}
           </GenericCarousel>
         )}
       </Suspense>

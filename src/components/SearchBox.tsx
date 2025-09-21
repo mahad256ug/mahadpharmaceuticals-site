@@ -16,8 +16,9 @@ const SearchBox = () => {
     e.preventDefault();
 
     if (searchInput && searchInput.trim().length > 0) {
-      const sanitized = sanitizeInput(searchInput);
-      router.push(`/products/?search=${sanitized}&page=1`); //
+      const sanitizedText = sanitizeInput(searchInput);
+      console.log(sanitizedText);
+      router.push(`/products/?search=${sanitizedText}&page=1`); //
     }
   }
   return (

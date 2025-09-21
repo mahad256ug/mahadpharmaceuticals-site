@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   icons: "/logo.svg",
 };
 
+// app/products/layout.tsx
 export const dynamic = "force-dynamic";
 
 export default function RootLayout({

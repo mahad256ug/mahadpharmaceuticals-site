@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 // component
 import { productType } from "@/lib/types";
 
-const FeaturedProducts = ({ ...product }: productType) => {
+const FeaturedProductCard = ({ ...product }: productType) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1.05 }}
@@ -18,7 +18,14 @@ const FeaturedProducts = ({ ...product }: productType) => {
       style={{ backgroundImage: `url(${product.thumbnail ?? "/drugs.jpeg"})` }}
       className="w-full h-full aspect-video bg-no-repeat bg-center bg-cover overflow-hidden"
     >
-      <div className="h-full w-full bg-gradient-to-t from-black/50 via-black/20 to-transparent flex flex-col p-5 sm:p-10 justify-end text-white">
+      <div className="h-full w-full bg-gradient-to-t from-black/50 via-black/20 to-transparent flex flex-col p-5 sm:p-10 justify-end text-white relative">
+        {!product.is_publish && (
+          <div className="absolute top-0 w-full bg-green-500 p-2 px-6 tex-center left-0">
+            <p className="text-current text-sm font-semibold">
+              Not yet Published
+            </p>
+          </div>
+        )}
         <motion.h3
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +41,7 @@ const FeaturedProducts = ({ ...product }: productType) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-          className="text-white/70 line-clamp-2 sm:line-clamp-3"
+          className="text-white/70 line-clamp-2 sm:line-clamp-3 bg-black/80 p-4 py-5"
         >
           {product.description}
         </motion.p>
@@ -43,4 +50,4 @@ const FeaturedProducts = ({ ...product }: productType) => {
   );
 };
 
-export default FeaturedProducts;
+export default FeaturedProductCard;

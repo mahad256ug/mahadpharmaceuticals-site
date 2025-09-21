@@ -1,14 +1,66 @@
 import React from "react";
+import Image from "next/image";
+
+// components
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
-import Image from "next/image";
-import { productImg } from "@/assets";
+import {
+  aboutImg1,
+  aboutImg2,
+  aboutImg3,
+  aboutImg4,
+  aboutImg5,
+  aboutImg6,
+} from "@/assets";
+
+function ProductsPreview() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-10">
+      <div className="">
+        <Image
+          className="h-auto max-w-full rounded-lg"
+          src={aboutImg3}
+          alt="about-img-3"
+          width={380}
+          height={450}
+        />
+      </div>
+      <div className="">
+        <Image
+          className="h-auto max-w-full rounded-lg"
+          src={aboutImg4}
+          alt="about-img-4"
+          width={450}
+          height={450}
+        />
+      </div>
+      <div>
+        <Image
+          className="h-auto max-w-full rounded-lg"
+          src={aboutImg5}
+          alt="about-img-5"
+          width={450}
+          height={450}
+        />
+      </div>
+      <div>
+        <Image
+          className="h-auto max-w-full rounded-lg"
+          src={aboutImg6}
+          alt="about-img-6"
+          width={450}
+          height={450}
+        />
+      </div>
+    </div>
+  );
+}
 
 const About = () => {
   return (
     <MaxWidthWrapper>
       <section>
-        <div className="gap-16 items-center lg:grid lg:grid-cols-2">
+        <div className="gap-16 items-center lg:grid lg:grid-cols-2 ">
           <div className="font-light  sm:text-lg">
             <SectionHead
               title=" About Maha Pharmaceuticals"
@@ -29,19 +81,23 @@ const About = () => {
           <div className="grid grid-cols-2 gap-4 mt-8">
             <Image
               className="w-full rounded-lg bg-neutral-100"
-              src={productImg}
+              src={aboutImg1}
               width={500}
               height={750}
-              alt="Drug"
+              alt="Lusera pid master"
             />
             <Image
               className="mt-4 w-full lg:mt-10 rounded-lg bg-neutral-100"
               width={500}
               height={750}
-              src={productImg}
-              alt="office content 2"
+              src={aboutImg2}
+              alt="Lusera pid master"
             />
           </div>
+        </div>
+
+        <div className="mt-20">
+          <ProductsPreview />
         </div>
       </section>
     </MaxWidthWrapper>

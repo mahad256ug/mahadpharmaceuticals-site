@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 
 // components
@@ -11,7 +11,11 @@ export const metadata: Metadata = {
 };
 
 const page = () => {
-  return <ShoppingCart />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ShoppingCart />;
+    </Suspense>
+  );
 };
 
 export default page;

@@ -12,8 +12,11 @@ import {
   endAt,
 } from "firebase/firestore";
 import { db } from "@/store/firebase";
+import { getCookie } from "@/lib/Cookie";
 import { PAGE_SIZE } from "@/lib/constants";
-import { shuffleArray } from "@/lib/utils";
+import { safeCompare, shuffleArray } from "@/lib/utils";
+
+const SECRET_CODE = process.env.SECRET_CODE ?? "";
 
 export async function GET(req: NextRequest) {
   try {
@@ -27,23 +30,42 @@ export async function GET(req: NextRequest) {
 
     const productsRef = collection(db, "products");
 
-    // Build base query (only include is_publish = true)
+    const secret_code = (await getCookie("auth")) ?? "";
+    const auth = safeCompare(secret_code, SECRET_CODE);
+
     let baseQuery;
 
     if (searchParam) {
-      baseQuery = query(
-        productsRef,
-        where("is_publish", "==", true),
-        orderBy("title"),
-        startAt(searchParam),
-        endAt(searchParam + "\uf8ff")
-      );
+      if (auth) {
+        // Authenticated: no is_publish filter
+        baseQuery = query(
+          productsRef,
+          orderBy("title"),
+          startAt(searchParam),
+          endAt(searchParam + "\uf8ff")
+        );
+      } else {
+        // Not authenticated: only published
+        baseQuery = query(
+          productsRef,
+          where("is_publish", "==", true),
+          orderBy("title"),
+          startAt(searchParam),
+          endAt(searchParam + "\uf8ff")
+        );
+      }
     } else {
-      baseQuery = query(
-        productsRef,
-        where("is_publish", "==", true),
-        orderBy("title")
-      );
+      if (auth) {
+        // Authenticated: no is_publish filter
+        baseQuery = query(productsRef, orderBy("title"));
+      } else {
+        // Not authenticated: only published
+        baseQuery = query(
+          productsRef,
+          where("is_publish", "==", true),
+          orderBy("title")
+        );
+      }
     }
 
     // Get total count for pagination (respecting is_publish)
@@ -55,7 +77,9 @@ export async function GET(req: NextRequest) {
 
     if (hProds) {
       // Just grab 4 published products
-      snapshot = await getDocs(query(baseQuery, limit(4)));
+      snapshot = await getDocs(
+        query(baseQuery, where("is_featured", "==", false), limit(4))
+      );
     } else if (hFeat) {
       // Grab 4 published + featured products
       snapshot = await getDocs(
@@ -85,15 +109,34 @@ export async function GET(req: NextRequest) {
       products = shuffleArray(products);
     }
 
-    return NextResponse.json({
-      products,
-      pageNum,
-      totalPages,
-    });
-  } catch (error) {
-    console.error(error);
+    if (auth) {
+      console.log("wokring please");
+      return NextResponse.json(
+        { products, pageNum, totalPages },
+        {
+          status: 200,
+          headers: {
+            "Cache-Control": "private, no-store, must-revalidate",
+          },
+        }
+      );
+    }
+
     return NextResponse.json(
-      { error: "Failed to fetch products" },
+      { products, pageNum, totalPages },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control":
+            "public, max-age=21600, s-maxage=21600, stale-while-revalidate=59",
+          Vary: "Cookie",
+        },
+      }
+    );
+  } catch (error) {
+    // console.error(error);
+    return NextResponse.json(
+      { error: `Failed to fetch products ${String(error)}` },
       { status: 500 }
     );
   }

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { productType } from "@/lib/types";
 import { useStoreContext } from "@/store/context";
+import { courrptImg } from "@/assets";
 
 const ProductCartCard = (product: productType) => {
   const { removeProductFromCart } = useStoreContext();
@@ -15,7 +16,7 @@ const ProductCartCard = (product: productType) => {
         <a href="#" className="w-20 shrink-0 md:order-1">
           <Image
             className="h-20 w-20 dark:hidden"
-            src={product.thumbnail ?? ""}
+            src={product.thumbnail ?? courrptImg}
             alt={product.title}
             width={300}
             height={300}

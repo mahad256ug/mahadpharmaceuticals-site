@@ -1,11 +1,10 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
-import Spinner from "./Spinner";
-
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // components
+import Loader from "./Loader";
 import ProductCard from "./ProductCard";
 import { productType } from "@/lib/types";
 import MaxWidthWrapper from "./MaxWidthWrapper";
@@ -13,27 +12,14 @@ import { ChevronLeft, ChevronRight, TicketMinus } from "lucide-react";
 import ListAnimationContainer from "./Animations/ListAnimationContainer";
 
 export default function Products() {
-  return (
-    <Suspense
-      fallback={
-        <div className="w-full h-[65vh] flex items-center justify-center">
-          <div className="h-10 w-10">
-            <Spinner className="fill-green-500 text-green-50" />
-          </div>
-        </div>
-      }
-    >
-      <ProductsContent />
-    </Suspense>
-  );
+  return <ProductsContent />;
 }
 
 const ProductsContent = () => {
   const router = useRouter();
-
-  // state
   const searchParams = useSearchParams();
-  const pageNum: number = searchParams.get("page")
+
+  const pageNum = searchParams.get("page")
     ? Number(searchParams.get("page"))
     : 1;
   const searchQ = searchParams.get("search") ?? undefined;
@@ -50,37 +36,43 @@ const ProductsContent = () => {
   });
 
   useEffect(() => {
-    async function fetchProducts(pgNum: number, searchQs: string | undefined) {
+    async function fetchProducts(pgNum: number, searchQs?: string) {
       let endPoint = `/api/products/?page=${pgNum}`;
-      setPaginator((prevData) => ({ ...prevData, loading: true }));
-
       if (searchQs) endPoint += `&search=${encodeURIComponent(searchQs)}`;
 
-      const res = await fetch(`${endPoint}`, { method: "GET" });
+      setPaginator((prev) => ({ ...prev, loading: true }));
 
-      if (res.ok) {
-        const resData = await res.json();
-        setProducts(resData.products);
-        setPaginator({
-          page: resData.pageNum,
-          totalPages: resData.totalPages,
-          loading: false,
-        });
-      } else {
-        setPaginator((prevData) => ({ ...prevData, loading: false }));
+      try {
+        const res = await fetch(endPoint);
+        if (res.ok) {
+          const resData = await res.json();
+          setProducts(resData.products);
+          setPaginator({
+            page: resData.pageNum,
+            totalPages: resData.totalPages,
+            loading: false,
+          });
+        } else {
+          setProducts([]);
+          setPaginator((prev) => ({ ...prev, loading: false }));
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setProducts([]);
+        setPaginator((prev) => ({ ...prev, loading: false }));
       }
     }
 
+    // Ensure we always have page param in URL
     const params = new URLSearchParams(searchParams.toString());
-
     if (!params.get("page")) {
       params.set("page", "1");
       router.replace(`?${params.toString()}`);
-      setTimeout(() => fetchProducts(pageNum, searchQ), 1000);
+      fetchProducts(1, searchQ);
     } else {
       fetchProducts(pageNum, searchQ);
     }
-  }, [searchParams, pageNum, router, searchQ]);
+  }, [pageNum, searchQ, searchParams, router]);
 
   const hasNext = paginator.page < paginator.totalPages;
   const hasPrevious = paginator.page > 1;
@@ -102,21 +94,19 @@ const ProductsContent = () => {
   return (
     <MaxWidthWrapper className="pb-20">
       {searchQ && (
-        <div className="text-lg pb-8 pt-0 flex items-center gap-2">
+        <div className="text-lg pb-8 flex items-center gap-2">
           <b className="font-bold">SEARCH:</b>
           <p>{searchQ}</p>
         </div>
       )}
 
       {paginator.loading ? (
-        <div className="w-full h-[65vh] flex items-center justify-center">
-          <Spinner className="fill-green-500 text-green-50" />
-        </div>
+        <Loader />
       ) : products.length > 0 ? (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-10 mb-20">
             {products.map((product, idx) => (
-              <ListAnimationContainer idx={idx} key={idx}>
+              <ListAnimationContainer idx={idx} key={product.id ?? idx}>
                 <ProductCard {...product} />
               </ListAnimationContainer>
             ))}
@@ -124,11 +114,11 @@ const ProductsContent = () => {
           <div className="h-12 flex items-center gap-10">
             {hasPrevious && (
               <button
-                className="flex items-center justify-center px-2 h-full leading-tight gap-2 rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 duration-300 transition-all"
                 onClick={handlePrev}
+                className="flex items-center justify-center px-2 h-full gap-2 rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 transition-all"
               >
                 <ChevronLeft className="size-4" />
-                <span className="text-current text-sm">Previous</span>
+                <span className="text-sm">Previous</span>
               </button>
             )}
             <p className="text-sm">
@@ -137,16 +127,16 @@ const ProductsContent = () => {
             {hasNext && (
               <button
                 onClick={handleNext}
-                className="flex items-center justify-center gap-2 px-2 h-full leading-tight rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 duration-300 transition-all"
+                className="flex items-center justify-center gap-2 px-2 h-full rounded-md border bg-neutral-100 hover:border-green-500 hover:text-black/80 transition-all"
               >
-                <span className="text-current text-sm">Next</span>
+                <span className="text-sm">Next</span>
                 <ChevronRight className="size-4" />
               </button>
             )}
           </div>
         </>
       ) : (
-        <div className="py-10 flex items-center flex-col gap-2 justify-center text-center h-[65vh]">
+        <div className="py-10 flex flex-col items-center gap-2 justify-center text-center h-[65vh]">
           <TicketMinus className="size-7" />
           <p>No Products at the moment</p>
         </div>
