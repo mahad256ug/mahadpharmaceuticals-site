@@ -6,7 +6,12 @@ import { Metadata } from "next";
 
 // fetch product server-side
 async function getProduct(slug: string) {
-  const res = await fetch(`http://127.0.0.1:3000/api/products/${slug}/`);
+  const res = await fetch(`http://127.0.0.1:3000/api/products/${slug}/`, {
+    cache: "force-cache", // ✅ caches response on the server
+    next: {
+      revalidate: 180, // optional: 6 hours in seconds
+    },
+  });
 
   if (!res.ok) return null;
   const data = await res.json();
@@ -25,24 +30,9 @@ export async function generateMetadata({
   const product = productInfo.product;
   if (productInfo.success) {
     return {
-      metadataBase: new URL("https://mahapharmaceticals.com"),
       title: `${product.title} | Maha Pharmaceuticals`,
       description:
         product.description?.slice(0, 160) ?? "View product details.",
-      openGraph: {
-        title: product.title,
-        description: product.description,
-        images: [
-          {
-            url: product.thumbnail ?? "/default.png",
-            width: 800,
-            height: 600,
-            alt: product.title,
-          },
-        ],
-        locale: "en_US",
-        type: "website",
-      },
     };
   }
 
