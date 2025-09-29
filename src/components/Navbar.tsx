@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import React, { useEffect, useState } from "react";
 
@@ -15,20 +15,33 @@ import { LucideShoppingBag, PlusIcon, Search, X } from "lucide-react";
 // motion
 import { AnimatePresence, motion } from "framer-motion";
 import { useStoreContext } from "@/store/context";
+import { Logout } from "@/fetchers/authentication";
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchValue = searchParams.get("search_query") ?? "";
 
   const { isAuthenticated, productsCart } = useStoreContext();
 
   const [searchBox, setSearchBox] = useState<boolean>(false);
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
-  const productsCartCount = productsCart.length;
+
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCount(productsCart?.length || 0);
+  }, [productsCart]);
 
   useEffect(() => {
     setToggleSidebar(false);
   }, [pathname]);
+
+  async function onLogout() {
+    await Logout();
+    window.location.reload();
+  }
 
   return (
     <div className="sticky top-0 z-50 bg-white">
@@ -68,6 +81,18 @@ const Navbar = () => {
                     </li>
                   );
                 })}
+
+                {isAuthenticated && (
+                  <li className="h-full flex items-center ">
+                    <button
+                      type="submit"
+                      onClick={onLogout}
+                      className={`relative z-10 uppercase px-3 py-2 hover:bg-transparent hover:border border-green-500 text-white hover:text-black/90 bg-green-500 w-full duration-300 transition-all`}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                )}
               </ul>
             </nav>
           </div>
@@ -101,6 +126,18 @@ const Navbar = () => {
                       </li>
                     );
                   })}
+
+                  {isAuthenticated && (
+                    <li className="h-full flex items-center w-full">
+                      <button
+                        type="button"
+                        onClick={onLogout}
+                        className={`relative z-10 uppercase px-3 py-2 hover:bg-transparent hover:border border-green-500 text-white hover:text-black/90 bg-green-500 w-full duration-300 transition-all`}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  )}
                 </ul>
               </motion.div>
             )}
@@ -115,24 +152,36 @@ const Navbar = () => {
               <Search className="size-5" />
             </button>
 
-            <button
-              onClick={() => {
-                router.push("/cart");
-              }}
-              type="button"
-              className={`w-10 h-10 flex items-center justify-center relative ${productsCartCount ? "bounce-ani" : ""}`}
-            >
-              <div>
-                <LucideShoppingBag className="size-5" />
-              </div>
-              {productsCartCount > 0 && (
+            {count !== null && count > 0 ? (
+              <button
+                onClick={() => {
+                  router.push("/cart");
+                }}
+                type="button"
+                className={`w-10 h-10 flex items-center justify-center relative bounce-ani`}
+              >
+                <div>
+                  <LucideShoppingBag className="size-5" />
+                </div>
                 <div className="absolute bg-green-500 h-6 w-6 -top-1 -right-1 flex items-center justify-center max-sm:text-sm">
                   <span className="text-xs font-semibold text-white">
-                    {productsCartCount}
+                    {count}
                   </span>
                 </div>
-              )}
-            </button>
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  router.push("/cart");
+                }}
+                type="button"
+                className={`w-10 h-10 flex items-center justify-center relative`}
+              >
+                <div>
+                  <LucideShoppingBag className="size-5" />
+                </div>
+              </button>
+            )}
 
             {isAuthenticated ? (
               <button
@@ -190,7 +239,7 @@ const Navbar = () => {
               >
                 <X className="size-5" />
               </button>
-              <SearchBox />
+              <SearchBox defaultSearchValue={searchValue} />
             </motion.div>
           )}
         </AnimatePresence>

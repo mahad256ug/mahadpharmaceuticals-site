@@ -2,13 +2,13 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import ContactUs from "@/components/ContactUs";
-import HomeProducts from "@/components/HomeProducts";
+import HomeProductsWrapper from "@/components/HomeProductsWrapper";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <HomeProducts />
+      <HomeProductsWrapper />
       <About />
       <ContactUs />
     </>

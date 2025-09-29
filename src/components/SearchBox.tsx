@@ -4,9 +4,15 @@ import React, { FormEvent, useState } from "react";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const SearchBox = () => {
+const SearchBox = ({
+  defaultSearchValue = "",
+}: {
+  defaultSearchValue?: string;
+}) => {
   const router = useRouter();
-  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>(
+    defaultSearchValue ?? ""
+  );
 
   const sanitizeInput = (input: string) => {
     return encodeURIComponent(input.trim());
@@ -18,7 +24,7 @@ const SearchBox = () => {
     if (searchInput && searchInput.trim().length > 0) {
       const sanitizedText = sanitizeInput(searchInput);
       console.log(sanitizedText);
-      router.push(`/products/?search=${sanitizedText}&page=1`); //
+      router.push(`/products/?search_query=${sanitizedText}&page=1`); //
     }
   }
   return (

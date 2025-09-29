@@ -1,15 +1,17 @@
 import React, { Suspense } from "react";
-
-// components
 import ProductForm from "@/components/forms/ProductForm";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
-const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
-  const { slug } = await params;
+const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params; // NO await
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ProductForm slug={slug} />;
+      <MaxWidthWrapper>
+        <ProductForm slug={slug} />
+      </MaxWidthWrapper>
     </Suspense>
   );
 };
 
-export default page;
+export default Page;

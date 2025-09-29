@@ -1,11 +1,11 @@
 // app/api/products/[slug]/route.ts
 import { db } from "@/store/firebase";
-import { getCookie } from "@/lib/Cookie";
-import { safeCompare } from "@/lib/utils";
+// import { revalidateSec } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 
-const SECRET_CODE = process.env.SECRET_CODE ?? "";
+// export const dynamic = "force-static";
+// export const revalidate = revalidateSec ?? 3600;
 
 export async function GET(
   request: NextRequest,
@@ -15,9 +15,6 @@ export async function GET(
     const slug = (await params).slug;
 
     // Check auth
-    const secret_code = (await getCookie("auth")) ?? "";
-    const auth = safeCompare(secret_code, SECRET_CODE);
-
     const productsRef = collection(db, "products");
     const q = query(productsRef, where("slug", "==", slug), limit(1));
     const snapshot = await getDocs(q);
@@ -34,31 +31,8 @@ export async function GET(
       ...snapshot.docs[0].data(),
     };
 
-    if (auth) {
-      // Authenticated: always fresh
-      return NextResponse.json(
-        { success: true, product },
-        {
-          status: 200,
-          headers: {
-            "Cache-Control": "private, no-store, must-revalidate",
-          },
-        }
-      );
-    }
-
     // Unauthenticated: cache 6 hours, vary on cookie
-    return NextResponse.json(
-      { success: true, product },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control":
-            "public, max-age=21600, s-maxage=21600, stale-while-revalidate=59",
-          Vary: "Cookie",
-        },
-      }
-    );
+    return NextResponse.json({ success: true, product }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: `Internal server error, ${String(error)}` },

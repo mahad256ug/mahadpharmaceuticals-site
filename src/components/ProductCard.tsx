@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 // compoenent
-import { courrptImg } from "@/assets";
+import { courrptImg, defaultImg } from "@/assets";
 import { productType } from "@/lib/types";
 import { useStoreContext } from "@/store/context";
 import { Bookmark, ClipboardEdit, Trash } from "lucide-react";
@@ -29,7 +29,7 @@ const ProductCard = ({ ...props }: productType) => {
           className="w-full h-full flex items-center justify-center"
         >
           <Image
-            src={props.thumbnail ?? courrptImg}
+            src={props.thumbnail ?? courrptImg ?? defaultImg}
             alt="image"
             width={300}
             height={520}

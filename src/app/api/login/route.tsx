@@ -10,7 +10,7 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const RATE_LIMIT = 2; // requests
+const RATE_LIMIT = 4; // requests
 const WINDOW = 30 * 60; // 30 minutes in seconds TODO
 
 export async function POST(req: Request) {

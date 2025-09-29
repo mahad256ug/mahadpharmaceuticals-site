@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Urbanist, Geist_Mono } from "next/font/google";
+import { Urbanist, Roboto_Mono } from "next/font/google";
+
 import "./globals.css";
 
 // components
@@ -15,8 +17,8 @@ const urbanist = Urbanist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const robotoMono = Roboto_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
@@ -31,9 +33,6 @@ export const metadata: Metadata = {
   icons: "/logo.svg",
 };
 
-// app/products/layout.tsx
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,11 +41,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${urbanist.variable} ${geistMono.variable} antialiased flex-1 text-foreground/80 text-lg`}
+        className={`${urbanist.variable} ${robotoMono.variable} antialiased flex-1 text-foreground/80 text-lg`}
       >
         <StoreProvider>
-          <Navbar />
-          <LoginForm />
+          <Suspense fallback={<div></div>}>
+            <Navbar />
+          </Suspense>
+          <Suspense fallback={<div></div>}>
+            <LoginForm />
+          </Suspense>
           <DeleteAlert />
           <ToastContainer />
           {children}

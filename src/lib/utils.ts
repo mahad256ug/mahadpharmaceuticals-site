@@ -46,3 +46,39 @@ export function sanitizeSearchParam(
 
   return sanitized || null;
 }
+
+export function formatPhoneNumber(
+  input: string,
+  defaultCountryCode?: string
+): string {
+  // Remove everything except digits
+  let digits = input.replace(/\D/g, "");
+
+  // If a default country code is provided and the number starts with 0
+  if (defaultCountryCode && digits.startsWith("0")) {
+    digits = defaultCountryCode + digits.slice(1);
+  }
+
+  // Example formatting rules:
+  // Feel free to switch based on digit length or country
+  if (digits.length === 12) {
+    // e.g. 256774123456 → +256 774 123 456
+    return `+${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(
+      6,
+      9
+    )} ${digits.slice(9)}`;
+  }
+
+  if (digits.length === 10) {
+    // e.g. 1234567890 → 123-456-7890
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+
+  if (digits.length === 9) {
+    // e.g. 774123456 → 774 123 456
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+  }
+
+  // Fallback: return as-is
+  return digits;
+}

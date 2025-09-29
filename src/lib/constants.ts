@@ -47,4 +47,12 @@ export const services: {
 ];
 
 export const PAGE_SIZE = 20;
-export const NO_NUMBER: string = "+256708332391";
+export const PHONE_NO: string = "+971522820802";
+export const revalidateTimeOutInSec: number = 43200; // 12 hours (or whatever you want)
+export const cacheKW = "products-cache";
+export const NODE_ENV: string | "development" | "production" | undefined =
+  process.env.NODE_ENV;
+
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
+
+export const revalidateSec = 3600;

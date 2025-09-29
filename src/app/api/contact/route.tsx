@@ -1,8 +1,11 @@
-import { Resend } from "resend";
-
 import { NextResponse } from "next/server";
 
+import { Resend } from "resend";
+import { NODE_ENV, PHONE_NO } from "@/lib/constants";
+import ContactMessage from "@/emails/ContactMessage";
+
 const resend = new Resend(process.env.RESEND_API_KEY);
+const recaptchaKey = process.env.RECAPTCHA_SECRET_KEY;
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +23,7 @@ export async function POST(req: Request) {
 
     // ✅ Verify reCAPTCHA with Google
     const params = new URLSearchParams();
-    params.append("secret", process.env.RECAPTCHA_SECRET_KEY!);
+    params.append("secret", recaptchaKey ?? "");
     params.append("response", token);
 
     const recaptchaRes = await fetch(
@@ -42,15 +45,34 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Send email with Resend
-    await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: "maha.pharmaceutical@gmail.com",
-      subject,
-      html: "<p>Congrats on sending your <strong>first email</strong>!</p>",
+    // sending email
+    const { data, error } = await resend.emails.send({
+      from: NODE_ENV === "development" ? "Acme <onboarding@resend.dev>" : "", // TODO
+      to: ["maha.pharmaceutical@gmail.com"],
+      subject: `Contact: ${subject}`,
+      react: ContactMessage({
+        name: name,
+        subject: subject,
+        sender_email: email,
+        message: message,
+        whatsappNumber: "",
+        siteName: "maha pharmaceuticals",
+      }),
+      text: [
+        `New Contact Message - ${subject}`,
+        `From: ${name} <${email}>`,
+        "",
+        message,
+        "",
+        `WhatsApp: ${PHONE_NO ? `https://wa.me/${PHONE_NO}` : "not set"}`,
+      ].join("\n"),
     });
 
-    return NextResponse.json({ success: true });
+    if (error) {
+      return NextResponse.json({ error: String(error) }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true, id: data?.id }, { status: 200 });
   } catch (err) {
     console.error("Contact API Error:", err);
     return NextResponse.json(

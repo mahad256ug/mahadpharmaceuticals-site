@@ -1,11 +1,18 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 // components
 import MaxWidthWrapper from "./MaxWidthWrapper";
 
 const Footer = () => {
-  const date = new Date();
-  const currentYear = date.getFullYear();
+  const [currentYear, setCurrentYear] = useState<number>(2025);
+
+  useEffect(() => {
+    const date = new Date();
+    const currentYear_ = date.getFullYear();
+    setCurrentYear(currentYear_);
+  }, [currentYear]);
+
   return (
     <footer>
       <div className="bg-neutral-100">

@@ -46,7 +46,7 @@ function ProductsPreview() {
       <div>
         <Image
           className="h-auto max-w-full rounded-lg"
-          src={aboutImg6}
+          src={aboutImg1}
           alt="about-img-6"
           width={450}
           height={450}
@@ -81,7 +81,7 @@ const About = () => {
           <div className="grid grid-cols-2 gap-4 mt-8">
             <Image
               className="w-full rounded-lg bg-neutral-100"
-              src={aboutImg1}
+              src={aboutImg6}
               width={500}
               height={750}
               alt="Lusera pid master"

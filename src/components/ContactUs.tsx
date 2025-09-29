@@ -4,10 +4,12 @@ import React, { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 // components
+import { PHONE_NO } from "@/lib/constants";
+import ReCAPTCHAField from "./ReCAPTCHAField";
+import { LocateFixedIcon } from "lucide-react";
+import { formatPhoneNumber } from "@/lib/utils";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
-import { LocateFixedIcon } from "lucide-react";
-import { NO_NUMBER } from "@/lib/constants";
 
 const ContactUs = () => {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
@@ -16,8 +18,9 @@ const ContactUs = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    const form = e.currentTarget;
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const values = Object.fromEntries(formData.entries());
 
     const token = await recaptchaRef.current?.getValue();
@@ -29,20 +32,27 @@ const ContactUs = () => {
       return;
     }
 
-    const res = await fetch("/api/contact/", {
-      method: "POST",
-      body: JSON.stringify(values),
-    });
+    try {
+      const res = await fetch("/api/contact/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
-    if (res.ok) {
-      alert("Message sent successfully!");
-      e.currentTarget.reset();
-    } else {
-      alert("Failed to send message. Try again.");
+      if (res.ok) {
+        alert("Message sent successfully!");
+        form.reset();
+      }
+    } catch (err) {
+      console.log(err);
     }
 
     setLoading(false);
   };
+
+  const whatsAppIntialMessage = "Hello Maha, am from the site.";
 
   return (
     <div>
@@ -101,8 +111,12 @@ const ContactUs = () => {
                       />
                     </svg>
                   </div>
-                  <a target="blank" href="" className="text-base ml-3">
-                    <p>{NO_NUMBER}</p>
+                  <a
+                    target="blank"
+                    href={`https://wa.me/${PHONE_NO}?text=${whatsAppIntialMessage}`}
+                    className="text-base ml-3"
+                  >
+                    <p>{formatPhoneNumber(PHONE_NO)}</p>
                   </a>
                 </li>
               </ul>
@@ -152,10 +166,7 @@ const ContactUs = () => {
             ></textarea>
 
             {/* reCAPTCHA */}
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-            />
+            <ReCAPTCHAField recaptchaRef={recaptchaRef} />
 
             <button
               type="submit"

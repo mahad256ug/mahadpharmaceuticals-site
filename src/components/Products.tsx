@@ -11,6 +11,8 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import { ChevronLeft, ChevronRight, TicketMinus } from "lucide-react";
 import ListAnimationContainer from "./Animations/ListAnimationContainer";
 
+import { fetchProducts } from "@/fetchers/products";
+
 export default function Products() {
   return <ProductsContent />;
 }
@@ -22,7 +24,7 @@ const ProductsContent = () => {
   const pageNum = searchParams.get("page")
     ? Number(searchParams.get("page"))
     : 1;
-  const searchQ = searchParams.get("search") ?? undefined;
+  const searchQ = searchParams.get("search_query") ?? undefined;
 
   const [products, setProducts] = useState<productType[]>([]);
   const [paginator, setPaginator] = useState<{
@@ -36,31 +38,13 @@ const ProductsContent = () => {
   });
 
   useEffect(() => {
-    async function fetchProducts(pgNum: number, searchQs?: string) {
-      let endPoint = `/api/products/?page=${pgNum}`;
-      if (searchQs) endPoint += `&search=${encodeURIComponent(searchQs)}`;
+    setPaginator((prev) => ({ ...prev, loading: true }));
 
-      setPaginator((prev) => ({ ...prev, loading: true }));
+    async function productFetcher(In1: string | undefined, In2: number) {
+      const fetch = await fetchProducts(In1, In2);
 
-      try {
-        const res = await fetch(endPoint);
-        if (res.ok) {
-          const resData = await res.json();
-          setProducts(resData.products);
-          setPaginator({
-            page: resData.pageNum,
-            totalPages: resData.totalPages,
-            loading: false,
-          });
-        } else {
-          setProducts([]);
-          setPaginator((prev) => ({ ...prev, loading: false }));
-        }
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setProducts([]);
-        setPaginator((prev) => ({ ...prev, loading: false }));
-      }
+      setProducts(fetch.products);
+      setPaginator(fetch.paginator);
     }
 
     // Ensure we always have page param in URL
@@ -68,9 +52,9 @@ const ProductsContent = () => {
     if (!params.get("page")) {
       params.set("page", "1");
       router.replace(`?${params.toString()}`);
-      fetchProducts(1, searchQ);
+      productFetcher(searchQ, pageNum);
     } else {
-      fetchProducts(pageNum, searchQ);
+      productFetcher(searchQ, pageNum);
     }
   }, [pageNum, searchQ, searchParams, router]);
 

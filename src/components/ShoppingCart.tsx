@@ -6,7 +6,7 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import ProductCartCard from "./ProductCartCard";
 import { useStoreContext } from "@/store/context";
-import { NO_NUMBER } from "@/lib/constants";
+import { PHONE_NO } from "@/lib/constants";
 
 const ShoppingCart = () => {
   const { productsCart, resetProductCart } = useStoreContext();
@@ -14,7 +14,7 @@ const ShoppingCart = () => {
   const message = encodeURIComponent(
     `Hello Maha Pharmaceuticals, I want to buy: ${productsCart.map((item) => item.title).join(", ")}`
   );
-  const whatsappLink = `https://wa.me/${NO_NUMBER}?text=${message}`;
+  const whatsappLink = `https://wa.me/${PHONE_NO}?text=${message}`;
 
   return (
     <MaxWidthWrapper>

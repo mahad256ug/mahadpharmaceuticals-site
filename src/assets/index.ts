@@ -1,6 +1,5 @@
 import Logo from "./logo.svg";
-import productImg from "./product.png";
-import drugImg from "./drugs.jpeg";
+import defaultImg from "./default.jpg";
 import aboutImg1 from "./about-img-1.jpeg";
 import aboutImg2 from "./about-img-2.jpeg";
 import aboutImg3 from "./about-img-3.jpeg";
@@ -11,13 +10,12 @@ import courrptImg from "./courrpt-image.jpg";
 
 export {
   Logo,
-  drugImg,
   aboutImg1,
   aboutImg2,
   aboutImg3,
   aboutImg4,
   aboutImg5,
   aboutImg6,
+  defaultImg,
   courrptImg,
-  productImg,
 };

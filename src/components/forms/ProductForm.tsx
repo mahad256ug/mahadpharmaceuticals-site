@@ -62,7 +62,7 @@ export default function ProductForm({ slug }: Props) {
     if (watch("title")) {
       setValue("slug", slugify(getValues("title")));
     }
-  }, [watch("title"), getValues, setValue, isAuthenticated, authLoading]);
+  }, [getValues, setValue, isAuthenticated, authLoading, router, watch]);
 
   // fetch product if editing
   useEffect(() => {
@@ -189,10 +189,10 @@ export default function ProductForm({ slug }: Props) {
   // only show form if adding OR product loaded
   if (addProductParam || slug || initialProduct) {
     return (
-      <MaxWidthWrapper className="relative">
+      <div className="relative">
         <form
           onSubmit={handleSubmit(onSubmitForm)}
-          className="max-w-4xl mx-auto sm:p-10 space-y-6"
+          className="w-full mx-auto sm:p-10 space-y-6"
         >
           <header className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-slate-800">
@@ -410,7 +410,7 @@ export default function ProductForm({ slug }: Props) {
             </div>
           </div>
         )}
-      </MaxWidthWrapper>
+      </div>
     );
   }
 

@@ -9,3 +9,7 @@ export type productType = {
   is_featured: boolean;
   view_price: boolean;
 };
+
+export type productType2 = {
+  id: string;
+};

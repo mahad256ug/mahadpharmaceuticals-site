@@ -1,7 +1,10 @@
+import { NextResponse } from "next/server";
+
+// mine
 import { getCookie } from "@/lib/Cookie";
 import { safeCompare } from "@/lib/utils";
 import { addProduct } from "@/store/fbUtils";
-import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 
 const SECRET_CODE = process.env.SECRET_CODE ?? "";
 
@@ -13,6 +16,12 @@ export async function POST(req: Request) {
     // Check secret code
     if (safeCompare(secret_code, SECRET_CODE)) {
       const newProd = await addProduct(data);
+
+      revalidateTag("fetch_home_featured_products");
+      revalidateTag("fetch_home_products");
+      revalidateTag("fetch_products");
+      revalidateTag("fetch_product");
+      revalidateTag("fetch_unpublished_products");
 
       return NextResponse.json(
         {
