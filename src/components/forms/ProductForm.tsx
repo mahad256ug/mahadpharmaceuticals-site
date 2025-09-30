@@ -62,7 +62,14 @@ export default function ProductForm({ slug }: Props) {
     if (watch("title")) {
       setValue("slug", slugify(getValues("title")));
     }
-  }, [getValues, setValue, isAuthenticated, authLoading, router, watch]);
+  }, [
+    getValues,
+    setValue,
+    isAuthenticated,
+    authLoading,
+    router,
+    watch("title"),
+  ]);
 
   // fetch product if editing
   useEffect(() => {
@@ -73,7 +80,7 @@ export default function ProductForm({ slug }: Props) {
         setLoading(true);
         setNotFound(false);
 
-        const res = await fetch(`/api/products/${slug}/`);
+        const res = await fetch(`/api/products/details/${slug}/`);
         if (res.ok) {
           const data = await res.json();
           if (data?.product) {

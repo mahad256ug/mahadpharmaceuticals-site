@@ -20,7 +20,10 @@ const ShoppingCart = () => {
     <MaxWidthWrapper>
       {productsCart.length > 0 ? (
         <div className="mx-auto max-w-screen-xl">
-          <h2 className="text-xl uppercase ">My Products / Drugs</h2>
+          <h2 className="text-xl uppercase mb-3">My Products / Drugs</h2>
+          <div>
+            <p>Remember, it is cash on delivery.</p>
+          </div>
           <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
               <div className="space-y-6">
@@ -78,9 +81,9 @@ const ShoppingCart = () => {
                     )
                   }
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 mt-10 flex items-center justify-center text-green-500 border border-green-500"
+                  className="w-full py-3.5 mt-10 px-4 text-center flex items-center justify-center text-green-500 border border-green-500 hover:bg-green-500 hover:text-white duration-300 transition-all"
                 >
-                  Place Your Order
+                  Place Your Order with cash on delivery.
                 </Link>
               </div>
             </div>

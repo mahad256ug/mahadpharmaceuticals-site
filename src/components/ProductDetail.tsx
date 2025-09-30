@@ -143,7 +143,7 @@ const ProductDetailContent = ({ slug }: Props) => {
                 target="_blank"
                 className="h-12 w-full border flex items-center justify-center border-green-500 text-green-500 hover:bg-green-500 hover:text-white duration-400 transition-all"
               >
-                <p className="text-current">Place Order Now</p>
+                <p className="text-current">Place Order On Cash on Deliverly</p>
               </Link>
             </div>
           </div>

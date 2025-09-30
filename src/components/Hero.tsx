@@ -18,7 +18,7 @@ const Hero = () => {
             </p>
 
             <h2 className="text-4xl md:text-5xl text-white leading-tight my-5">
-              Welcome to Maha Pharmaceuticals
+              Welcome to Mahad Pharmaceuticals
             </h2>
             <p className="text-white/80">
               Trusted online pharmacy in the UAE, offering prescription and

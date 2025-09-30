@@ -25,6 +25,7 @@ const DeleteAlert = () => {
       if (result.success) {
         toast.success("Product was deleted successfully.");
         setDeleteAlertState((prev) => ({ ...prev, isVisible: false }));
+        window.location.reload();
       } else {
         toast.error("Failed to delete product.");
       }

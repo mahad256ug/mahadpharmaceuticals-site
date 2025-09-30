@@ -10,6 +10,7 @@ import { LocateFixedIcon } from "lucide-react";
 import { formatPhoneNumber } from "@/lib/utils";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SectionHead from "./Animations/SectionHead";
+import Link from "next/link";
 
 const ContactUs = () => {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
@@ -66,7 +67,7 @@ const ContactUs = () => {
               subtitleClass="mx-0"
             />
 
-            <div className="my-8">
+            <Link href="mailto:mail@mahadpharmaceuticals.com" className="my-8">
               <h2 className="text-lg text-green-500">Email</h2>
               <ul className="mt-3">
                 <li className="flex items-center">
@@ -83,18 +84,19 @@ const ContactUs = () => {
                       />
                     </svg>
                   </div>
-                  <a
-                    target="blank"
-                    href="mailTo:maha.pharmaceutical@gmail.com"
-                    className="text-base ml-3"
-                  >
-                    <p>maha.pharmaceutical@gmail.com</p>
-                  </a>
+
+                  <p className="text-base ml-3">
+                    mail@mahadpharmaceuticals.com
+                  </p>
                 </li>
               </ul>
-            </div>
+            </Link>
 
-            <div className="my-8">
+            <Link
+              target="blank"
+              className="block my-8"
+              href={`https://wa.me/${PHONE_NO}?text=${whatsAppIntialMessage}`}
+            >
               <h2 className="text-lg text-green-500">WhatsApp</h2>
               <ul className="mt-3">
                 <li className="flex items-center">
@@ -111,16 +113,13 @@ const ContactUs = () => {
                       />
                     </svg>
                   </div>
-                  <a
-                    target="blank"
-                    href={`https://wa.me/${PHONE_NO}?text=${whatsAppIntialMessage}`}
-                    className="text-base ml-3"
-                  >
-                    <p>{formatPhoneNumber(PHONE_NO)}</p>
-                  </a>
+
+                  <p className="text-base ml-3">
+                    {formatPhoneNumber(PHONE_NO)}
+                  </p>
                 </li>
               </ul>
-            </div>
+            </Link>
 
             <div className="my-8">
               <h2 className="text-lg text-green-500">Location</h2>

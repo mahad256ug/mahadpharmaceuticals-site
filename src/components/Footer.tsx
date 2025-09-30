@@ -18,7 +18,7 @@ const Footer = () => {
       <div className="bg-neutral-100">
         <MaxWidthWrapper>
           <p className="text-center text-base leading-tight ">
-            © {String(currentYear)} Maha Pharmaceuticals. All rights reserved.
+            © {String(currentYear)} Mahad Pharmaceuticals. All rights reserved.
           </p>
         </MaxWidthWrapper>
       </div>

@@ -64,7 +64,10 @@ const Navbar = () => {
             <nav className="flex h-full w-full">
               <ul className="w-full flex items-center gap-2 h-full ">
                 {navLink.map((item, idx) => {
-                  const isActive = pathname === item.href;
+                  const isActive =
+                    item.href === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(item.href);
 
                   return (
                     <li className="h-full flex items-center" key={idx}>
