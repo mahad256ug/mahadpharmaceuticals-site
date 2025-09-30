@@ -7,9 +7,6 @@ import { collection, query, orderBy, getDocs, where } from "firebase/firestore";
 
 const SECRET_CODE = process.env.SECRET_CODE ?? "";
 
-// export const dynamic = "force-static";
-// export const revalidate = revalidateSec ?? 3600;
-
 // product_un_published;
 export async function GET() {
   try {

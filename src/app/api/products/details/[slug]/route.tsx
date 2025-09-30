@@ -16,13 +16,21 @@ export async function GET(
     const slug = (await params).slug;
     const secret_code = (await getCookie("auth")) ?? "";
 
+    let snapshot;
+    const productsRef = collection(db, "products");
     // Check auth
     if (safeCompare(secret_code, SECRET_CODE)) {
+      const q = query(productsRef, where("slug", "==", slug), limit(1));
+      snapshot = await getDocs(q);
     } else {
+      const q = query(
+        productsRef,
+        where("slug", "==", slug),
+        where("is_publish", "==", true),
+        limit(1)
+      );
+      snapshot = await getDocs(q);
     }
-    const productsRef = collection(db, "products");
-    const q = query(productsRef, where("slug", "==", slug), limit(1));
-    const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       return NextResponse.json(
