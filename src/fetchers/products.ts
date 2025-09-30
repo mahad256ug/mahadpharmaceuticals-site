@@ -102,7 +102,7 @@ export async function fetchUnpublishedProducts(): Promise<productType[]> {
 
   const res = await fetch(`${endPoint}`, {
     method: "GET",
-    next: { revalidate: 3600 },
+    next: { revalidate: 600 }, // 10 minutes
   });
 
   if (res.ok) {

@@ -3,9 +3,10 @@ import { db } from "@/store/firebase";
 // import { revalidateSec } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { safeCompare } from "@/lib/utils";
+import { getCookie } from "@/lib/Cookie";
 
-// export const dynamic = "force-static";
-// export const revalidate = revalidateSec ?? 3600;
+const SECRET_CODE = process.env.SECRET_CODE ?? "";
 
 export async function GET(
   request: NextRequest,
@@ -13,8 +14,12 @@ export async function GET(
 ) {
   try {
     const slug = (await params).slug;
+    const secret_code = (await getCookie("auth")) ?? "";
 
     // Check auth
+    if (safeCompare(secret_code, SECRET_CODE)) {
+    } else {
+    }
     const productsRef = collection(db, "products");
     const q = query(productsRef, where("slug", "==", slug), limit(1));
     const snapshot = await getDocs(q);
