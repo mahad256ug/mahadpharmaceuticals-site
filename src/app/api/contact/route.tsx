@@ -44,10 +44,16 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    console.log("calling api");
 
     // sending email
     const { data, error } = await resend.emails.send({
-      from: NODE_ENV === "development" ? "Acme <onboarding@resend.dev>" : "", // TODO
+      // from:
+      //   NODE_ENV === "development"
+      //     ? "Acme <onboarding@resend.dev>"
+      //     : "mail@mahadpharmaceuticals.com", // TODO
+      // to: ["mail@mahadpharmaceuticals.com"],
+      from: "mail@mahadpharmaceuticals.com", // TODO
       to: ["maha.pharmaceutical@gmail.com"],
       subject: `Contact: ${subject}`,
       react: ContactMessage({
@@ -56,7 +62,7 @@ export async function POST(req: Request) {
         sender_email: email,
         message: message,
         whatsappNumber: "",
-        siteName: "maha pharmaceuticals",
+        siteName: "mahad pharmaceuticals",
       }),
       text: [
         `New Contact Message - ${subject}`,
@@ -69,12 +75,13 @@ export async function POST(req: Request) {
     });
 
     if (error) {
+      console.log(error, "this isthe error");
       return NextResponse.json({ error: String(error) }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true, id: data?.id }, { status: 200 });
   } catch (err) {
-    console.error("Contact API Error:", err);
+    console.log("Contact API Error:", err);
     return NextResponse.json(
       { error: "Internal server error. Please try again later." },
       { status: 500 }

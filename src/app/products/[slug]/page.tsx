@@ -18,7 +18,7 @@ export async function generateMetadata({
   if (product) {
     return {
       metadataBase: new URL(BASE_URL ?? ""),
-      title: `${product.title} | Maha Pharmaceuticals`,
+      title: `${product.title} | Mahad Pharmaceuticals`,
       description:
         product.description?.slice(0, 160) ?? "View product details.",
       openGraph: {
@@ -39,7 +39,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: "Product Not Found | Maha Pharmaceuticals",
+    title: "Product Not Found | Mahad Pharmaceuticals",
     description: "This product does not exist or is unavailable.",
   };
 }

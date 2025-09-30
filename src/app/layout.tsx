@@ -24,12 +24,12 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Maha pharmaceuticals",
-    template: "%s | Maha pharmaceuticals",
+    default: "Mahad pharmaceuticals",
+    template: "%s | Mahad pharmaceuticals",
     absolute: "",
   },
   description:
-    "Maha Pharmaceuticals is a trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.",
+    "Mahad Pharmaceuticals is a trusted online pharmacy in the UAE, offering prescription and over-the-counter medicines with fast, secure delivery and convenient Cash on Delivery options.",
   icons: "/logo.svg",
 };
 

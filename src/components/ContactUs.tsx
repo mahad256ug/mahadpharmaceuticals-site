@@ -67,7 +67,12 @@ const ContactUs = () => {
               subtitleClass="mx-0"
             />
 
-            <Link href="mailto:mail@mahadpharmaceuticals.com" className="my-8">
+            <a
+              href="mailto:mail@mahadpharmaceuticals.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="my-8"
+            >
               <h2 className="text-lg text-green-500">Email</h2>
               <ul className="mt-3">
                 <li className="flex items-center">
@@ -90,7 +95,7 @@ const ContactUs = () => {
                   </p>
                 </li>
               </ul>
-            </Link>
+            </a>
 
             <Link
               target="blank"
